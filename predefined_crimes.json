@@ -1,0 +1,632 @@
+[
+    {
+        "name": "Diebstahl",
+        "paragraph": "§ 242 StGB",
+        "detention_units": 0,
+        "fine": 2000
+    },
+    {
+        "name": "Diebstahl von Staatseigentum",
+        "paragraph": "§ 242 StGB",
+        "detention_units": 5,
+        "fine": 2500
+    },
+    {
+        "name": "Diebstahl von Fahrzeugen",
+        "paragraph": "§ 243 StGB",
+        "detention_units": 2,
+        "fine": 2750
+    },
+    {
+        "name": "Diebstahl von Staats-/Rettungsfahrzeugen",
+        "paragraph": "§ 243 StGB",
+        "detention_units": 10,
+        "fine": 7500
+    },
+    {
+        "name": "Betrug",
+        "paragraph": "§ 263 StGB",
+        "detention_units": 10,
+        "fine": 5000
+    },
+    {
+        "name": "Errichten einer Straßenblockade (Nötigung)",
+        "paragraph": "§ 240 StGB",
+        "detention_units": 0,
+        "fine": 3500
+    },
+    {
+        "name": "Raub",
+        "paragraph": "§ 249 StGB",
+        "detention_units": 10,
+        "fine": 4000
+    },
+    {
+        "name": "Bewaffneter Raub",
+        "paragraph": "§ 249 StGB",
+        "detention_units": 15,
+        "fine": 5000
+    },
+    {
+        "name": "Bankraub",
+        "paragraph": "§ 249 StGB",
+        "detention_units": 25,
+        "fine": 0
+    },
+    {
+        "name": "Juwelenraub",
+        "paragraph": "§ 242 StGB",
+        "detention_units": 20,
+        "fine": 2500
+    },
+    {
+        "name": "Sachbeschädigung",
+        "paragraph": "§ 303 StGB",
+        "detention_units": 0,
+        "fine": 950
+    },
+    {
+        "name": "Hehlerei",
+        "paragraph": "§ 259 StGB",
+        "detention_units": 10,
+        "fine": 0
+    },
+    {
+        "name": "Vertrieb von Staatlichen Gegenständen",
+        "paragraph": "§ 134 StGB",
+        "detention_units": 15,
+        "fine": 9500
+    },
+    {
+        "name": "Rufmord",
+        "paragraph": "§ 187 StGB",
+        "detention_units": 20,
+        "fine": 1500
+    },
+    {
+        "name": "Gefährdung durch den Gebrauch einer Schusswaffe",
+        "paragraph": "§ 223 StGB",
+        "detention_units": 10,
+        "fine": 3500
+    },
+    {
+        "name": "Beleidigung",
+        "paragraph": "§ 185 StGB",
+        "detention_units": 0,
+        "fine": 50
+    },
+    {
+        "name": "Belästigung",
+        "paragraph": "§ 185 StGB",
+        "detention_units": 10,
+        "fine": 50
+    },
+    {
+        "name": "Drohung",
+        "paragraph": "§ 241 StGB",
+        "detention_units": 0,
+        "fine": 1000
+    },
+    {
+        "name": "Morddrohung",
+        "paragraph": "§ 241 StGB",
+        "detention_units": 0,
+        "fine": 2500
+    },
+    {
+        "name": "Unterlassene Hilfeleistung",
+        "paragraph": "§ 323 StGB",
+        "detention_units": 5,
+        "fine": 500
+    },
+    {
+        "name": "Freiheitsberaubung",
+        "paragraph": "§ 239 StGB",
+        "detention_units": 20,
+        "fine": 10000
+    },
+    {
+        "name": "Körperverletzung",
+        "paragraph": "§ 223 StGB",
+        "detention_units": 10,
+        "fine": 1000
+    },
+    {
+        "name": "Schwere Körperverletzung",
+        "paragraph": "§ 226 StGB",
+        "detention_units": 15,
+        "fine": 2500
+    },
+    {
+        "name": "Körperverletzung mit Todesfolge",
+        "paragraph": "§ 227 StGB",
+        "detention_units": 25,
+        "fine": 4500
+    },
+    {
+        "name": "Geiselnahme",
+        "paragraph": "§ 239b StGB",
+        "detention_units": 20,
+        "fine": 10000
+    },
+    {
+        "name": "Beihilfe zur Geiselnahme",
+        "paragraph": "§ 239b StGB",
+        "detention_units": 15,
+        "fine": 5000
+    },
+    {
+        "name": "Fahrlässige Tötung",
+        "paragraph": "§ 222 StGB",
+        "detention_units": 25,
+        "fine": 7500
+    },
+    {
+        "name": "Totschlag",
+        "paragraph": "§ 212 StGB",
+        "detention_units": 30,
+        "fine": 8000
+    },
+    {
+        "name": "Mord",
+        "paragraph": "§ 211 StGB",
+        "detention_units": 40,
+        "fine": 10000
+    },
+    {
+        "name": "Versuchter Mord",
+        "paragraph": "§ 211 StGB",
+        "detention_units": 25,
+        "fine": 7500
+    },
+    {
+        "name": "Mehrfacher Mord",
+        "paragraph": "§ 211 StGB",
+        "detention_units": 30,
+        "fine": 30000
+    },
+    {
+        "name": "Mehrfacher Versuchter Mord",
+        "paragraph": "§211 StGB",
+        "detention_units": 15,
+        "fine": 8000
+    },
+    {
+        "name": "Beihilfe zum Mord",
+        "paragraph": "§ 211 StGB",
+        "detention_units": 20,
+        "fine": 5000
+    },
+    {
+        "name": "Beihilfe zum Mehrfachen Mord",
+        "paragraph": "§ 211 StGB",
+        "detention_units": 25,
+        "fine": 7500
+    },
+    {
+        "name": "Mord an ein Staatsbeamten",
+        "paragraph": "§ 211 StGB",
+        "detention_units": 35,
+        "fine": 15000
+    },
+    {
+        "name": "Versuchter Mord eines Staatsbeamten",
+        "paragraph": "§ 211 StGB",
+        "detention_units": 20,
+        "fine": 10000
+    },
+    {
+        "name": "Mehrfacher Mord eines Staatsbeamten",
+        "paragraph": "§ 211 StGB",
+        "detention_units": 40,
+        "fine": 20000
+    },
+    {
+        "name": "Mehrfacher Versuchter Mord eines Staatsbeamten",
+        "paragraph": "§ 211 StGB",
+        "detention_units": 25,
+        "fine": 10000
+    },
+    {
+        "name": "Beihilfe zum Mord eines Staatsbeamten",
+        "paragraph": "§ 211 StGB",
+        "detention_units": 35,
+        "fine": 8000
+    },
+    {
+        "name": "Beihilfe zum Mehrfachen Mord eines Staatsbeamten",
+        "paragraph": "§ 211 StGB",
+        "detention_units": 20,
+        "fine": 20000
+    },
+    {
+        "name": "Nicht Beachten einer Amtlichen Anweisung",
+        "paragraph": "§ 263 StGB",
+        "detention_units": 0,
+        "fine": 1500
+    },
+    {
+        "name": "Entziehung einer Polizeilichen Maßnahme",
+        "paragraph": "§ 113 StGB",
+        "detention_units": 10,
+        "fine": 1500
+    },
+    {
+        "name": "Behinderung eines Beamten bei der Ausführung seiner Arbeit",
+        "paragraph": "§ 113 StGB",
+        "detention_units": 10,
+        "fine": 2000
+    },
+    {
+        "name": "Wiederstand gegen die Staatsgewalt",
+        "paragraph": "§ 113 StGB",
+        "detention_units": 15,
+        "fine": 2500
+    },
+    {
+        "name": "Strafvereitelung",
+        "paragraph": "§ 258 StGB",
+        "detention_units": 15,
+        "fine": 1000
+    },
+    {
+        "name": "Bestechung",
+        "paragraph": "§ 334 StGB",
+        "detention_units": 10,
+        "fine": 2000
+    },
+    {
+        "name": "Befreiung von Verdächtigen",
+        "paragraph": "§ 239b StGB",
+        "detention_units": 20,
+        "fine": 3000
+    },
+    {
+        "name": "Gefängniss Ausbruch",
+        "paragraph": "§ 120 StGB",
+        "detention_units": 30,
+        "fine": 5000
+    },
+    {
+        "name": "Beihilfe zum Gefängnis Ausbruch",
+        "paragraph": "§ 120 StGB",
+        "detention_units": 15,
+        "fine": 2500
+    },
+    {
+        "name": "Versuchter Gefängnis Ausbruch",
+        "paragraph": "§ 120 StGB",
+        "detention_units": 20,
+        "fine": 3000
+    },
+    {
+        "name": "Beihilfe zum Versuchten Gefägnisausbruch",
+        "paragraph": "§ 120 StGB",
+        "detention_units": 15,
+        "fine": 1000
+    },
+    {
+        "name": "Beihilfe zur Flucht",
+        "paragraph": "§ 120 StGB",
+        "detention_units": 0,
+        "fine": 3500
+    },
+    {
+        "name": "Verbrecherische Flucht",
+        "paragraph": "§ 120 StGB",
+        "detention_units": 15,
+        "fine": 2500
+    },
+    {
+        "name": "Durchbrechen von Absperrungen",
+        "paragraph": "§ 240 StGB",
+        "detention_units": 0,
+        "fine": 1000
+    },
+    {
+        "name": "Falsche Namensangabe",
+        "paragraph": "§ 111 StGB",
+        "detention_units": 10,
+        "fine": 1000
+    },
+    {
+        "name": "Fälschen von Staatlichen Dokumenten",
+        "paragraph": "§ 267 StGB",
+        "detention_units": 10,
+        "fine": 1500
+    },
+    {
+        "name": "Illegales betreten von Sperrgebieten",
+        "paragraph": "§ 123 StGB",
+        "detention_units": 5,
+        "fine": 2000
+    },
+    {
+        "name": "Unangemeldete Demo",
+        "paragraph": "§ 21 VSLGS",
+        "detention_units": 20,
+        "fine": 5000
+    },
+    {
+        "name": "Verstoß gegen das Vermumungsgesetz",
+        "paragraph": "§ 17 VSLGS",
+        "detention_units": 0,
+        "fine": 1500
+    },
+    {
+        "name": "Missbrauch des Notrufs",
+        "paragraph": "§ 145 StGB",
+        "detention_units": 10,
+        "fine": 5000
+    },
+    {
+        "name": "Amtsanmaßung",
+        "paragraph": "§ 132 StGB",
+        "detention_units": 20,
+        "fine": 200
+    },
+    {
+        "name": "Bildung einer Kriminellen Organisation",
+        "paragraph": "§ 132 StGB",
+        "detention_units": 25,
+        "fine": 150000
+    },
+    {
+        "name": "Ausübung einer Staatsgefähdender Gewalttat",
+        "paragraph": "§ 81 StGB",
+        "detention_units": 40,
+        "fine": 150000
+    },
+    {
+        "name": "Mitglied einer Illegalen/Kriminellen Organisation",
+        "paragraph": "§ 129 StGB",
+        "detention_units": 30,
+        "fine": 100000
+    },
+    {
+        "name": "Zerstörung von Polizei eigentum",
+        "paragraph": "§ 303 StGB",
+        "detention_units": 15,
+        "fine": 5000
+    },
+    {
+        "name": "Zerstörung von Staatseigentum",
+        "paragraph": "§ 303 StGB",
+        "detention_units": 15,
+        "fine": 15000
+    },
+    {
+        "name": "Hausfriedensbruch",
+        "paragraph": "§ 123 StGB",
+        "detention_units": 0,
+        "fine": 250
+    },
+    {
+        "name": "Amtsmißbrauch",
+        "paragraph": "§ 332 StGB",
+        "detention_units": 25,
+        "fine": 10000
+    },
+    {
+        "name": "Hochverrat",
+        "paragraph": "§ 81 StGB",
+        "detention_units": 40,
+        "fine": 20000
+    },
+    {
+        "name": "Landesverrat",
+        "paragraph": "§ 91 StGB",
+        "detention_units": 40,
+        "fine": 0
+    },
+    {
+        "name": "Erregung Öffentlichen Ärgernisses",
+        "paragraph": "§ 118 OWiG",
+        "detention_units": 0,
+        "fine": 2000
+    },
+    {
+        "name": "Verletzung der Privatsphäre",
+        "paragraph": "§ 201 StGB",
+        "detention_units": 0,
+        "fine": 500
+    },
+    {
+        "name": "Veröffentlichung von Kriminellen Inhalt",
+        "paragraph": "§ 131 StGB",
+        "detention_units": 15,
+        "fine": 30000
+    },
+    {
+        "name": "Veröffentlichung von Beweismaterial",
+        "paragraph": "§ 201a StGB",
+        "detention_units": 20,
+        "fine": 2525
+    },
+    {
+        "name": "Fahren eines PKW's ohne Führerschein",
+        "paragraph": "§1 abs. 1 STVO",
+        "detention_units": 0,
+        "fine": 1250
+    },
+    {
+        "name": "Fahren eines LKW's ohne Führerschein",
+        "paragraph": "§1 abs. 2 STVO",
+        "detention_units": 0,
+        "fine": 1500
+    },
+    {
+        "name": "Fahren eines Motorads ohne Führerschein",
+        "paragraph": "§1 abs. 3 STVO",
+        "detention_units": 0,
+        "fine": 1250
+    },
+    {
+        "name": "Fahren eines Busses ohne Führerschein",
+        "paragraph": "§1 abs. 4 STVO",
+        "detention_units": 0,
+        "fine": 1500
+    },
+    {
+        "name": "Falschparken",
+        "paragraph": "§2 abs.1 STVO",
+        "detention_units": 0,
+        "fine": 50
+    },
+    {
+        "name": "Behinderung des Straßenverkehrs",
+        "paragraph": "§2 abs. 2 STVO",
+        "detention_units": 0,
+        "fine": 2500
+    },
+    {
+        "name": "Schwere Behinderung des Straßenverkehrs",
+        "paragraph": "§2 abs. 2.1 STVO",
+        "detention_units": 0,
+        "fine": 5000
+    },
+    {
+        "name": "Fahren ohne Beleuchtung",
+        "paragraph": "§2 abs. 4 STVO",
+        "detention_units": 0,
+        "fine": 500
+    },
+    {
+        "name": "Unfall ohne Todesfolge",
+        "paragraph": "§2 abs. 5 STVO",
+        "detention_units": 0,
+        "fine": 2000
+    },
+    {
+        "name": "Unfall mit Todesfolge",
+        "paragraph": "§2 abs. 5.1 STVO",
+        "detention_units": 15,
+        "fine": 4500
+    },
+    {
+        "name": "Fahrerflucht ohne Todesfolge",
+        "paragraph": "§2 abs. 6 STVO",
+        "detention_units": 5,
+        "fine": 1000
+    },
+    {
+        "name": "Fahrerflucht mit Todesfolge",
+        "paragraph": "§2 abs. 6.1 STVO",
+        "detention_units": 20,
+        "fine": 2000
+    },
+    {
+        "name": "Gefährliche Fahrweise",
+        "paragraph": "§2 abs. 7 STVO",
+        "detention_units": 0,
+        "fine": 150
+    },
+    {
+        "name": "Nicht beachten von Anhalte-/Sondersignalen",
+        "paragraph": "§2 abs. 8 STVO",
+        "detention_units": 0,
+        "fine": 7500
+    },
+    {
+        "name": "Fahren eines Illegalen Straßenrennens",
+        "paragraph": "§2 abs. 9 STVO",
+        "detention_units": 30,
+        "fine": 3500
+    },
+    {
+        "name": "Missachten der STVO",
+        "paragraph": "§2 abs. 10 STVO",
+        "detention_units": 0,
+        "fine": 150
+    },
+    {
+        "name": "Schwerer Eingriff in denn Straßenverkehr",
+        "paragraph": "§2 abs. 11 STVO",
+        "detention_units": 5,
+        "fine": 5000
+    },
+    {
+        "name": "5-15 Km/H Geschwindigkeitsüberschreitung",
+        "paragraph": "§4 abs. 1 STVO",
+        "detention_units": 0,
+        "fine": 350
+    },
+    {
+        "name": "15-25 Km/H Geschwindigkeitsüberschreitung",
+        "paragraph": "§4 abs. 2 STVO",
+        "detention_units": 0,
+        "fine": 500
+    },
+    {
+        "name": "25-50 Km/H Geschwindigkeitsüberschreitung",
+        "paragraph": "§4 abs. 3 STVO",
+        "detention_units": 0,
+        "fine": 1000
+    },
+    {
+        "name": "50-100Km/H Geschwindigkeitsüberschreitung",
+        "paragraph": "§4 abs. 4 STVO",
+        "detention_units": 5,
+        "fine": 1250
+    },
+    {
+        "name": "Führen eines nicht Straßenzulässigen Fahrzeugs",
+        "paragraph": "§5 abs. 1 STVO",
+        "detention_units": 0,
+        "fine": 3250
+    },
+    {
+        "name": "Führen eines Fahrzeugs ohne Fahrzeugschein",
+        "paragraph": "§5 abs. 2 STVO",
+        "detention_units": 0,
+        "fine": 4000
+    },
+    {
+        "name": "Führen eines Fahrzeugs mit Illegalem Tuning",
+        "paragraph": "§5 abs. 3 STVO",
+        "detention_units": 0,
+        "fine": 5000
+    },
+    {
+        "name": "Besitz einer Waffe ohne Waffenschein",
+        "paragraph": "§ 52 WaffG",
+        "detention_units": 15,
+        "fine": 5250
+    },
+    {
+        "name": "Besitz einer Langwaffe ohne Waffenschein",
+        "paragraph": "§ 52 WaffG",
+        "detention_units": 25,
+        "fine": 6000
+    },
+    {
+        "name": "Offenes führen einer Waffe",
+        "paragraph": "§ 42 WaffG",
+        "detention_units": 0,
+        "fine": 3250
+    },
+    {
+        "name": "Besitz einer Illegalen Handfeuerwaffe",
+        "paragraph": "§ 52 WaffG",
+        "detention_units": 5,
+        "fine": 4500
+    },
+    {
+        "name": "Besitz eine Illegalen Langwaffe",
+        "paragraph": "§ 52 WaffG",
+        "detention_units": 5,
+        "fine": 9000
+    },
+    {
+        "name": "Vertrieb von Illegalen Gegenständen",
+        "paragraph": "§ 29 BtMG/H",
+        "detention_units": 10,
+        "fine": 4500
+    },
+    {
+        "name": "Illegale Einwanderung",
+        "paragraph": "§ 95 AufenthG",
+        "detention_units": 40,
+        "fine": 30000
+    }
+]

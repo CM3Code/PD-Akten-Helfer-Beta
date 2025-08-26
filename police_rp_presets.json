@@ -1,0 +1,6 @@
+[
+    {
+        "name": "TEST",
+        "template_string": "Hallo [name], wie geht es dir [name] , heute ist [datum]"
+    }
+]

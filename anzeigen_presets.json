@@ -1,0 +1,37 @@
+[
+    {
+        "id": "d08b5689-7fd2-417f-99a2-f9da54084c36",
+        "name": "Festnahme",
+        "template_string": "[Herr/Frau] [Name] wurde am [Datum] um [Uhrzeit] in [Ort] festgenommen. \n\nGrund der Festnahme: [Grund]. Die Person wurde zur [Ort der Verbringung] verbracht. \n\nHaftzeit: [Anzahl] Hafteinheiten. \n\nGeldstrafe: [Betrag]€. \n\nAktenzeichen: [Aktenzeichen].\n\nUnterschrift: [Officer Name]."
+    },
+    {
+        "id": "c3ff7302-cf8f-4c56-bb50-dbf470e36c5f",
+        "name": "Festnahme 2 Officer",
+        "template_string": "[Herr/Frau] [Name] wurde am [Datum] um [Uhrzeit] in [Ort] festgenommen. \n\nGrund der Festnahme: [Grund]. Die Person wurde zur [Ort der Verbringung] verbracht. \n\nHaftzeit: [Anzahl] Hafteinheiten. \n\nGeldstrafe: [Betrag]€. \n\nAktenzeichen: [Aktenzeichen].\n\nUnterschrift Beamter 1: [Officer Name1].\nUnterschrift Beamter 2: [Officer Name2]."
+    },
+    {
+        "id": "c95dff35-bdd2-4fa0-a419-425f617c378b",
+        "name": "NRW Festnahme",
+        "template_string": "Wer: [Wer]\n\nGrund der Festnahme: [Grund der Festnahme]\n\nWo: [Wo]\n\nWann: [Wann] Uhr\n\nHaftzeiten: [Haftzeiten]\n\nWeitere Infos: [Weitere Infos]\n\nStreifen Partner: [Streifen Partner]\n\nUnterschrift des Beamten: [Unterschrift des Beamten]"
+    },
+    {
+        "id": "b4b44a4d-17de-4e6a-8b87-88b1bb7f25a2",
+        "name": "NRW Zeugenverhör-Protokoll",
+        "template_string": "1. Allgemeine Informationen:\n\n- Verfahrensnummer: [Nummer einfügen]\n- Datum des Verhörs: [Datum einfügen]\n- Uhrzeit des Verhörs: [Uhrzeit einfügen]\n- Ort des Verhörs: [Ort einfügen]\n- Vernehmender Beamter: [Name und Dienstnummer einfügen]\n\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n\n2. Angaben zum Zeugen:\n\n- Name: [Name des Zeugen einfügen]\n- Alter: [Alter einfügen]\n- Adresse: [Adresse einfügen]\n- Telefonnummer: [Discorduser einfügen]\n- Beruf: [Beruf einfügen]\n- Beziehung zum Fall: [z.B. Augenzeuge, Bekannter des Beschuldigten, etc.]\n\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n\n3. Verhörverlauf:\n\n3.1. Einleitung:\n\n- Begrüßung des Zeugen: [Kurze Notiz zur Begrüßung]\n- Erklärung des Verfahrens: [Kurze Erklärung, warum der Zeuge vernommen wird]\n\n3.2. Fragen an den Zeugen:\n\n1. Frage 1: [Frage einfügen]\n- Antwort des Zeugen: [Antwort einfügen]\n\n2. Frage 2: [Frage einfügen]\n- Antwort des Zeugen: [Antwort einfügen]\n\n3. Frage 3: [Frage einfügen]\n- Antwort des Zeugen: [Antwort einfügen]\n\n4. Frage 4: [Frage einfügen]\n- Antwort des Zeugen: [Antwort einfügen]\n\n5. Weitere Fragen: [Zusätzliche Fragen und Antworten einfügen]\n\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n\n4. Besondere Hinweise:\n\n- Verhalten des Zeugen: [Notizen über das Verhalten des Zeugen während des Verhörs, z.B. Nervosität, Klarheit der Aussagen]\n- Widersprüche: [Hinweise auf eventuelle Widersprüche in den Aussagen]\n- Zusätzliche Informationen: [Weitere relevante Informationen, die der Zeuge gegeben hat]\n\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n\n5. Abschluss des Verhörs:\n\n- Zusammenfassung der Aussagen: [Kurze Zusammenfassung der wichtigsten Punkte]\n- Dank an den Zeugen: [Notiz über das Dankeschön an den Zeugen]\n- Information über weitere Schritte: [Information, ob der Zeuge eventuell erneut kontaktiert wird]\n\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n\n6. Unterschrift:\n\n- Unterschrift des vernehmenden Beamten: ______________________\n- Datum: [Datum einfügen]"
+    },
+    {
+        "id": "f3c9024e-8c87-4b95-a27a-39f38a504e3f",
+        "name": "NRW Unfallbericht",
+        "template_string": "1. Allgemeine Informationen:\n\n- Berichtsnummer: [Nummer einfügen]\n- Datum des Unfalls: [Datum einfügen]\n- Uhrzeit des Unfalls: [Uhrzeit einfügen]\n- Ort des Unfalls: [Ort einfügen]\n- Wetterbedingungen: [z.B. sonnig, regnerisch, neblig]\n\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n\n2. Beteiligte Personen:\n\n- Name des Geschädigten: [Name einfügen]\n- Alter: [Alter einfügen]\n- Adresse: [Adresse einfügen]\n- Telefonnummer: [Discordsuser einfügen]\n\n- Name des Verursachers: [Name einfügen]\n- Alter: [Alter einfügen]\n- Adresse: [Adresse einfügen]\n- Telefonnummer: [Discordsuser einfügen]\n\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n\n3. Unfallhergang:\n\n- Beschreibung des Unfalls:\n[Detaillierte Beschreibung des Unfallhergangs, einschließlich der beteiligten Fahrzeuge, der Bewegungen der Fahrzeuge, der Umstände, die zum Unfall führten, etc.]\n\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n\n4. Schäden:\n\n- Fahrzeug des Geschädigten:\n- Marke/Modell: [Marke/Modell einfügen]\n- Kennzeichen: [Kennzeichen einfügen]\n- Art des Schadens: [z.B. Lackschaden, Totalschaden, etc.]\n\n- Fahrzeug des Verursachers:\n- Marke/Modell: [Marke/Modell einfügen]\n- Kennzeichen: [Kennzeichen einfügen]\n- Art des Schadens: [z.B. Lackschaden, Totalschaden, etc.]\n\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n\n5. Zeugen:\n\n- Name des Zeugen 1: [Name einfügen]\n- Kontaktinformationen: [Telefonnummer/Adresse einfügen]\n\n- Name des Zeugen 2: [Name einfügen]\n- Kontaktinformationen: [Telefonnummer/Adresse einfügen]\n\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n\n6. Verletzungen:\n\n- Verletzungen des Geschädigten:\n[Beschreibung der Verletzungen, falls vorhanden]\n\n- Verletzungen des Verursachers:\n[Beschreibung der Verletzungen, falls vorhanden]\n\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n\n7. Maßnahmen nach dem Unfall:\n\n- Eingeleitete Maßnahmen:\n[z.B. Polizei gerufen, Rettungsdienst gerufen, etc.]\n\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n\n8. Unterschrift:\n\n- Unterschrift des Beamten:\n\n- Datum:"
+    },
+    {
+        "id": "c7aebd45-e9c1-4fd1-a143-14f6e10bfb4c",
+        "name": "NRW Ordnungswidrigkeiten",
+        "template_string": "Grund des Ordnungsgeldes: [Grund des Ordnungsgeldes]\n\nWo: [Wo]\n\nWann: [Wann]\n\nOrdnungsgeld: [Ordnungsgeld]\n\nWeitere Infos: [Weitere Infos]\n\nUnterschrift des Beamten: [Unterschrift des Beamten]\n\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n\nDas \"Ordnungsgeld\" ist eine andere Wortart für \"Bußgeld\"."
+    },
+    {
+        "id": "e0cb91cb-1f2b-4f55-8893-46e6de83df7e",
+        "name": "NRW Fahndung",
+        "template_string": "Wer: [Wenn Personalausweis gesehen]\n\nPersonalausweis: [Personalausweis]\n\nKennzeichen/Fahrzeug Details: [Kennzeichen/Fahrzeug Details]\n\nStraftat: [Straftat]\n\nBild, wenn Gesicht nicht Verdeckt"
+    }
+]
