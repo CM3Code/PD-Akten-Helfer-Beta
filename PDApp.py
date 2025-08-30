@@ -156,8 +156,10 @@ class PoliceRPApp:
         self.root.geometry("1200x850") # Larger initial window size for more tabs
         self.root.minsize(900, 700) # Set minimum window size
 
-        # --- Design: Root window background ---
-        self.root.configure(bg='#e0e0e0') # Light grey background for the root window
+        # --- Settings Management ---
+        self.settings_file = "settings.json"
+        self.settings = self.load_settings()
+        self.apply_theme()
 
         # Define file paths for different data types
         self.notes_file = "notizen.json"
@@ -220,6 +222,131 @@ class PoliceRPApp:
 
         self.create_widgets()
 
+    def load_settings(self):
+        """Loads settings from a JSON file."""
+        if os.path.exists(self.settings_file):
+            try:
+                with open(self.settings_file, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+            except json.JSONDecodeError:
+                messagebox.showerror("Fehler", f"Fehler beim Laden von {self.settings_file}. Die Datei ist möglicherweise beschädigt. Standardeinstellungen werden verwendet.")
+                return {"theme": "light"} # Fallback to default
+        return {"theme": "light"} # Default settings
+
+    def save_settings(self):
+        """Saves settings to a JSON file."""
+        try:
+            with open(self.settings_file, 'w', encoding='utf-8') as f:
+                json.dump(self.settings, f, indent=4, ensure_ascii=False)
+        except IOError as e:
+            messagebox.showerror("Speicherfehler", f"Konnte Einstellungen nicht speichern in {self.settings_file}: {e}")
+
+    def apply_theme(self):
+        """Applies the current theme to the application."""
+        theme = self.settings.get("theme", "light")
+        if theme == "dark":
+            self.root.configure(bg='#333333')
+            bg_color = '#444444'
+            fg_color = '#ffffff'
+            border_color = '#555555'
+            label_bg = '#444444'
+            label_fg = '#eeeeee'
+            entry_bg = '#555555'
+            entry_fg = '#ffffff'
+            select_bg = '#5a7e9e'
+            select_fg = '#ffffff'
+        else: # light theme
+            self.root.configure(bg='#e0e0e0')
+            bg_color = '#f0f0f0'
+            fg_color = '#333333'
+            border_color = '#cccccc'
+            label_bg = '#f0f0f0'
+            label_fg = '#333333'
+            entry_bg = '#ffffff'
+            entry_fg = '#333333'
+            select_bg = '#cceeff'
+            select_fg = '#333333'
+        
+        style = ttk.Style()
+        style.theme_use('clam')
+        style.configure('TFrame', background=bg_color)
+        style.configure('TLabelframe', background=bg_color, borderwidth=1, relief="solid", bordercolor=border_color)
+        style.configure('TLabelframe.Label', background=label_bg, foreground=label_fg, font=('Arial', 12, 'bold'))
+        style.configure('TLabel', background=label_bg, foreground=label_fg)
+        style.configure('TButton', font=('Arial', 10), background='#358DFF', foreground='white', borderwidth=0, relief="flat", padding=[10, 5])
+        style.map('TButton', background=[('active', '#126ADD')], foreground=[('active', 'white')])
+        style.configure("Accent.TButton", font=("Arial", 12, "bold"), foreground="white", background="#4CAF50", borderwidth=0, relief="flat", padding=[12, 6])
+        style.map("Accent.TButton", background=[('active', '#45a049')])
+        style.configure("CAccent.TButton", font=("Arial", 12, "bold"), foreground="white", background="#358DFF", borderwidth=0, relief="flat", padding=[12, 6])
+        style.map("CAccent.TButton", background=[('active', "#126ADD")])
+        style.configure('TNotebook', background=bg_color, borderwidth=0)
+        style.configure('TNotebook.Tab', background=bg_color, foreground=fg_color)
+        style.map('TNotebook.Tab', background=[('selected', label_bg)], foreground=[('selected', fg_color)])
+        
+        # Apply to Listbox and ScrolledText directly
+        # These are handled in the widget creation
+        self.bg_color = bg_color
+        self.fg_color = fg_color
+        self.entry_bg = entry_bg
+        self.entry_fg = entry_fg
+        self.select_bg = select_bg
+        self.select_fg = select_fg
+
+        # Re-apply styles to existing widgets
+        if hasattr(self, 'notebook'):
+            for tab_name in self.notebook.tabs():
+                tab_frame = self.notebook.nametowidget(tab_name)
+                for child in tab_frame.winfo_children():
+                    if isinstance(child, ttk.Frame):
+                         for sub_child in child.winfo_children():
+                             if isinstance(sub_child, (ttk.Frame, ttk.LabelFrame)):
+                                 sub_child.configure(style='TFrame')
+                             elif isinstance(sub_child, ttk.Label):
+                                 sub_child.configure(style='TLabel')
+                             elif isinstance(sub_child, ttk.Button):
+                                 sub_child.configure(style='TButton')
+                             elif isinstance(sub_child, ttk.Entry):
+                                 sub_child.configure(style='TEntry')
+                             # This is the line that was causing the issue, so we'll remove it.
+                             # child.configure(style='TFrame') 
+            
+            # Update specific widgets that need direct configuration
+            for widget in [
+                getattr(self, 'new_note_content_text', None), 
+                getattr(self, 'notes_listbox', None),
+                getattr(self, 'selected_note_content_text', None),
+                getattr(self, 'new_report_description_text', None),
+                getattr(self, 'reports_listbox', None),
+                getattr(self, 'selected_report_content_text', None),
+                getattr(self, 'new_pf_description_text', None),
+                getattr(self, 'perpetrator_files_listbox', None),
+                getattr(self, 'selected_pf_content_text', None),
+                getattr(self, 'new_report_preset_template_text', None),
+                getattr(self, 'report_presets_listbox', None),
+                getattr(self, 'generated_report_text', None),
+                getattr(self, 'predefined_crimes_listbox', None)
+            ]:
+                if widget:
+                    try:
+                        widget.config(bg=self.entry_bg, fg=self.entry_fg, selectbackground=self.select_bg, selectforeground=self.select_fg)
+                    except tk.TclError:
+                        pass # Some widgets don't have all these options
+
+            # Update canvases
+            if hasattr(self, 'notes_canvas'):
+                self.notes_canvas.config(bg=bg_color)
+            if hasattr(self, 'reports_canvas'):
+                self.reports_canvas.config(bg=bg_color)
+            if hasattr(self, 'perpetrator_files_canvas'):
+                self.perpetrator_files_canvas.config(bg=bg_color)
+            if hasattr(self, 'manage_crimes_canvas'):
+                self.manage_crimes_canvas.config(bg=bg_color)
+            if hasattr(self, 'report_presets_canvas'):
+                self.report_presets_canvas.config(bg=bg_color)
+            if hasattr(self, 'settings_canvas'):
+                self.settings_canvas.config(bg=bg_color)
+
+
     def load_data(self, filename):
         """Lädt Daten aus einer JSON-Datei."""
         if os.path.exists(filename):
@@ -236,7 +363,14 @@ class PoliceRPApp:
                             
                             # Migrate crimes_committed from list of strings to list of dicts
                             if 'crimes_committed' in record and all(isinstance(c, str) for c in record['crimes_committed']):
-                                record['crimes_committed'] = [{"name": c, "paragraph": "", "detention_units": 0, "fine": 0} for c in record['crimes_committed']]
+                                record['crimes_committed'] = [{"name": c, "paragraph": "", "detention_units": 0, "fine": 0, "count": 1} for c in record['crimes_committed']]
+                            
+                            # Ensure 'count' exists for all crime objects
+                            if 'crimes_committed' in record:
+                                for crime_obj in record['crimes_committed']:
+                                    if 'count' not in crime_obj:
+                                        crime_obj['count'] = 1
+
                     
                     # Data migration for perpetrator_files (address to birthplace)
                     if filename == self.perpetrator_files_json:
@@ -275,101 +409,47 @@ class PoliceRPApp:
         self.notebook = ttk.Notebook(self.root)
         self.notebook.pack(expand=True, fill="both", padx=10, pady=10)
 
-        # --- Design: Apply a modern theme and configure styles ---
-        style = ttk.Style()
-        style.theme_use('clam') # 'clam' theme often provides a good base for modern look
-
-        # Configure general frame and labelframe backgrounds
-        style.configure('TFrame', background='#f0f0f0') # Light grey for frames
-        style.configure('TLabelframe', background='#f0f0f0', borderwidth=1, relief="solid", bordercolor='#cccccc') # Light grey for labelframes, subtle border
-        style.configure('TLabelframe.Label', background='#f0f0f0', foreground='#333333', font=('Arial', 12, 'bold')) # Label for labelframes
-
-        # Configure ttk.Label
-        style.configure('TLabel', background='#f0f0f0', foreground='#333333')
-
-        # Configure ttk.Entry
-        style.map('TEntry',
-                  background=[('focus', '#ffffff'), ('!focus', '#ffffff')], # White background
-                  fieldbackground=[('focus', '#ffffff'), ('!focus', '#ffffff')], # White background
-                  foreground=[('readonly', '#555555'), ('!readonly', '#333333')], # Darker text color
-                  bordercolor=[('focus', '#4a90e2'), ('!focus', '#cccccc')], # Blue border on focus
-                  lightcolor=[('focus', '#4a90e2'), ('!focus', '#cccccc')],
-                  darkcolor=[('focus', '#4a90e2'), ('!focus', '#cccccc')])
-
-        # Configure ttk.Button
-        style.configure('TButton',
-                        font=('Arial', 10),
-                        background='#358DFF', # A shade of blue
-                        foreground='white',
-                        borderwidth=0,
-                        relief="flat",
-                        padding=[10, 5]) # Add padding
-        style.map('TButton',
-                  background=[('active', '#126ADD')], # Darker blue on hover
-                  foreground=[('active', 'white')])
-
-        # Accent Button (e.g., for "Bericht erstellen")
-        style.configure("Accent.TButton",
-                        font=("Arial", 12, "bold"),
-                        foreground="white",
-                        background="#4CAF50", # Green
-                        borderwidth=0,
-                        relief="flat",
-                        padding=[12, 6])
-        style.map("Accent.TButton",
-                  background=[('active', '#45a049')]) # Darker green on hover
-        
-        # CAccent Button (e.g., for "Bericht Kopieren")
-        style.configure("CAccent.TButton",
-                        font=("Arial", 12, "bold"),
-                        foreground="white",
-                        background="#358DFF", # Green
-                        borderwidth=0,
-                        relief="flat",
-                        padding=[12, 6])
-        style.map("CAccent.TButton",
-                  background=[('active', "#126ADD")]) # Darker green on hover
-
-        # Configure Listbox and ScrolledText (tk widgets, need direct bg config)
-        # These will be set directly where they are created.
-
-
-        # Tab Order: Notizen, Anzeigen, Täterakten, Straftaten verwalten, Anzeigen Presets
+        # Tab Order: Notizen, Anzeigen, Täterakten, Straftaten verwalten, Anzeigen Presets, Einstellungen
         # Notes Tab
-        self.notes_frame = ttk.Frame(self.notebook, padding="15 15 15 15") # Increased padding
+        self.notes_frame = ttk.Frame(self.notebook, padding="15 15 15 15")
         self.notebook.add(self.notes_frame, text="Notizen")
         self.create_notes_tab(self.notes_frame)
         
         # Reports Tab (main entry for new cases, links to perpetrator files)
-        self.reports_frame = ttk.Frame(self.notebook, padding="15 15 15 15") # Increased padding
+        self.reports_frame = ttk.Frame(self.notebook, padding="15 15 15 15")
         self.notebook.add(self.reports_frame, text="Anzeigen")
         self.create_reports_tab(self.reports_frame)
 
         # Perpetrator Files Tab (cumulative records of individuals)
-        self.perpetrator_files_frame = ttk.Frame(self.notebook, padding="15 15 15 15") # Increased padding
+        self.perpetrator_files_frame = ttk.Frame(self.notebook, padding="15 15 15 15")
         self.notebook.add(self.perpetrator_files_frame, text="Täterakten")
         self.create_perpetrator_files_tab(self.perpetrator_files_frame)
 
         # Manage Crimes Tab (new)
-        self.manage_crimes_frame = ttk.Frame(self.notebook, padding="15 15 15 15") # Increased padding
+        self.manage_crimes_frame = ttk.Frame(self.notebook, padding="15 15 15 15")
         self.notebook.add(self.manage_crimes_frame, text="Straftaten verwalten")
         self.create_manage_crimes_tab(self.manage_crimes_frame)
 
         # Report Presets Tab
-        self.report_presets_frame = ttk.Frame(self.notebook, padding="15 15 15 15") # Increased padding
-        self.notebook.add(self.report_presets_frame, text="Bericht Presets") #Anzeigen Presets
+        self.report_presets_frame = ttk.Frame(self.notebook, padding="15 15 15 15")
+        self.notebook.add(self.report_presets_frame, text="Bericht Presets")
         self.create_report_presets_tab(self.report_presets_frame)
+        
+        # Settings Tab
+        self.settings_frame = ttk.Frame(self.notebook, padding="15 15 15 15")
+        self.notebook.add(self.settings_frame, text="Einstellungen")
+        self.create_settings_tab(self.settings_frame)
+        
+        # Re-apply theme after creating all widgets
+        self.apply_theme()
+
 
     def _create_scrollable_tab(self, parent_container):
         """Creates a scrollable frame within a parent container (a tab)."""
-        # Create a canvas and a vertical scrollbar
-        canvas = tk.Canvas(parent_container, bg='#f0f0f0', highlightthickness=0)
+        canvas = tk.Canvas(parent_container, bg=self.bg_color, highlightthickness=0)
         scrollbar = ttk.Scrollbar(parent_container, orient="vertical", command=canvas.yview)
-        
-        # This frame will contain all the widgets and will be scrolled by the canvas
         scrollable_frame = ttk.Frame(canvas)
 
-        # Bind the frame's configure event to update the canvas scroll region
         scrollable_frame.bind(
             "<Configure>",
             lambda e: canvas.configure(
@@ -377,21 +457,18 @@ class PoliceRPApp:
             )
         )
 
-        # Create a window in the canvas for the scrollable frame
         canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
         canvas.configure(yscrollcommand=scrollbar.set)
 
-        # Pack the canvas and scrollbar
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
-
-
-        return scrollable_frame
+        
+        return scrollable_frame, canvas
 
     # --- Notes Tab Functions ---
     def create_notes_tab(self, parent_frame):
         """Creates widgets for the Notes tab."""
-        content_frame = self._create_scrollable_tab(parent_frame)
+        content_frame, self.notes_canvas = self._create_scrollable_tab(parent_frame)
         content_frame.grid_columnconfigure(0, weight=1)
         content_frame.grid_rowconfigure(1, weight=1) # Let the list group expand
         content_frame.grid_rowconfigure(2, weight=1) # Let the selected note group expand
@@ -405,7 +482,7 @@ class PoliceRPApp:
         self.new_note_title_entry = ttk.Entry(new_note_group)
         self.new_note_title_entry.grid(row=0, column=1, sticky="ew", padx=5, pady=2)
         ttk.Label(new_note_group, text="Inhalt:").grid(row=1, column=0, sticky="nw", padx=5, pady=2)
-        self.new_note_content_text = scrolledtext.ScrolledText(new_note_group, wrap=tk.WORD, height=8, bg='#ffffff', fg='#333333', insertbackground='#333333', relief="flat", borderwidth=1) # Design: ScrolledText bg/fg/relief
+        self.new_note_content_text = scrolledtext.ScrolledText(new_note_group, wrap=tk.WORD, height=8, bg=self.entry_bg, fg=self.entry_fg, insertbackground=self.entry_fg, relief="flat", borderwidth=1) # Design: ScrolledText bg/fg/relief
         self.new_note_content_text.grid(row=1, column=1, sticky="ew", padx=5, pady=2)
         add_note_button = ttk.Button(new_note_group, text="Notiz hinzufügen", command=self.add_note)
         add_note_button.grid(row=2, column=0, columnspan=2, pady=10)
@@ -416,7 +493,7 @@ class PoliceRPApp:
         notes_list_group.grid_rowconfigure(0, weight=1)
         notes_list_group.grid_columnconfigure(0, weight=1)
 
-        self.notes_listbox = tk.Listbox(notes_list_group, selectmode=tk.SINGLE, font=("Arial", 10), bg='#ffffff', fg='#333333', selectbackground='#cceeff', selectforeground='#333333', relief="flat", borderwidth=1) # Design: Listbox bg/fg/selection/relief
+        self.notes_listbox = tk.Listbox(notes_list_group, selectmode=tk.SINGLE, font=("Arial", 10), bg=self.entry_bg, fg=self.entry_fg, selectbackground=self.select_bg, selectforeground=self.select_fg, relief="flat", borderwidth=1) # Design: Listbox bg/fg/selection/relief
         self.notes_listbox.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
         self.notes_listbox.bind('<<ListboxSelect>>', self.display_selected_note)
         notes_scrollbar = ttk.Scrollbar(notes_list_group, orient="vertical", command=self.notes_listbox.yview)
@@ -438,7 +515,7 @@ class PoliceRPApp:
         selected_note_group.grid_rowconfigure(0, weight=1)
         selected_note_group.grid_columnconfigure(0, weight=1)
 
-        self.selected_note_content_text = scrolledtext.ScrolledText(selected_note_group, wrap=tk.WORD, height=8, state='disabled', bg='#ffffff', fg='#333333', relief="flat", borderwidth=1) # Design: ScrolledText bg/fg/relief
+        self.selected_note_content_text = scrolledtext.ScrolledText(selected_note_group, wrap=tk.WORD, height=8, state='disabled', bg=self.entry_bg, fg=self.entry_fg, relief="flat", borderwidth=1) # Design: ScrolledText bg/fg/relief
         self.selected_note_content_text.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
         self.populate_notes_list()
 
@@ -493,13 +570,14 @@ class PoliceRPApp:
         edit_window.grab_set()
         edit_window.grid_rowconfigure(1, weight=1)
         edit_window.grid_columnconfigure(1, weight=1)
-
+        
+        edit_window.configure(bg=self.bg_color)
         ttk.Label(edit_window, text="Titel:").grid(row=0, column=0, sticky="w", padx=5, pady=5)
         edit_title_entry = ttk.Entry(edit_window)
         edit_title_entry.grid(row=0, column=1, sticky="ew", padx=5, pady=5)
         edit_title_entry.insert(0, note['title'])
         ttk.Label(edit_window, text="Inhalt:").grid(row=1, column=0, sticky="nw", padx=5, pady=5)
-        edit_content_text = scrolledtext.ScrolledText(edit_window, wrap=tk.WORD, height=10, bg='#ffffff', fg='#333333', insertbackground='#333333', relief="flat", borderwidth=1) # Design: ScrolledText bg/fg/relief
+        edit_content_text = scrolledtext.ScrolledText(edit_window, wrap=tk.WORD, height=10, bg=self.entry_bg, fg=self.entry_fg, insertbackground=self.entry_fg, relief="flat", borderwidth=1) # Design: ScrolledText bg/fg/relief
         edit_content_text.grid(row=1, column=1, sticky="nsew", padx=5, pady=5)
         edit_content_text.insert(1.0, note['content'])
 
@@ -544,7 +622,8 @@ class PoliceRPApp:
         dialog.geometry("550x650")
         dialog.transient(self.root)
         dialog.grab_set()
-
+        
+        dialog.configure(bg=self.bg_color)
         dialog.grid_rowconfigure(1, weight=1) # Listbox frame (now row 1)
         dialog.grid_rowconfigure(2, weight=0) # Add new crime section (now row 2)
         dialog.grid_rowconfigure(3, weight=0) # Buttons (now row 3)
@@ -569,57 +648,88 @@ class PoliceRPApp:
         checkbox_container.grid(row=0, column=0, sticky="nsew")
         checkbox_container.grid_columnconfigure(0, weight=1) # Allow checkboxes to expand
 
-        # This will hold ALL BooleanVars for ALL predefined crimes, keyed by a unique identifier
         all_crimes_vars = {} 
-        # Initialize all_crimes_vars once when the dialog is created
-        for i, crime_obj in enumerate(self.predefined_crimes):
-            # Use a tuple (name, paragraph) as a unique key for each crime object
-            crime_key = (crime_obj['name'], crime_obj.get('paragraph', ''))
-            var = tk.BooleanVar(value=False)
-            # Set initial state based on current_selection_list
-            if any(c.get('name') == crime_obj.get('name') and c.get('paragraph') == crime_obj.get('paragraph') for c in current_selection_list):
-                var.set(True)
-            all_crimes_vars[crime_key] = var
 
-        # Add a scrollbar to the checkbox container if needed
-        canvas_for_checkboxes = tk.Canvas(checkbox_container, bg='#f0f0f0') # Design: Canvas bg
-        canvas_for_checkboxes.grid(row=0, column=0, sticky="nsew")
+        # Create a scrollable container for the checkboxes and spinboxes
+        canvas_for_widgets = tk.Canvas(checkbox_container, bg=self.bg_color)
+        canvas_for_widgets.grid(row=0, column=0, sticky="nsew")
         
-        inner_frame = ttk.Frame(canvas_for_checkboxes)
-        canvas_for_checkboxes.create_window((0, 0), window=inner_frame, anchor="nw")
+        inner_frame = ttk.Frame(canvas_for_widgets)
+        canvas_for_widgets.create_window((0, 0), window=inner_frame, anchor="nw")
+        inner_frame.grid_columnconfigure(0, weight=1)
 
         def _on_frame_configure(event):
-            canvas_for_checkboxes.configure(scrollregion=canvas_for_checkboxes.bbox("all"))
-
+            canvas_for_widgets.configure(scrollregion=canvas_for_widgets.bbox("all"))
         inner_frame.bind("<Configure>", _on_frame_configure)
 
-        def populate_checkboxes(filter_text=""):
-            # Clear existing checkboxes
+        def on_checkbox_toggle(check_var, spin_var):
+            if check_var.get():
+                spin_var.set(1)
+            else:
+                spin_var.set(0)
+
+
+        def populate_crime_widgets(filter_text=""):
+            # Clear existing widgets
             for widget in inner_frame.winfo_children():
                 widget.destroy()
 
+            # Filter crimes based on search text
             filtered_crimes = [
                 crime_obj for crime_obj in self.predefined_crimes
                 if filter_text.lower() in crime_obj['name'].lower() or \
                    (crime_obj.get('paragraph') and filter_text.lower() in crime_obj['paragraph'].lower())
             ]
-            
+
+            # Populate with new widgets
             for i, crime_obj in enumerate(filtered_crimes):
                 crime_key = (crime_obj['name'], crime_obj.get('paragraph', ''))
-                var = all_crimes_vars[crime_key] # Get the existing BooleanVar
-                display_text = f"{crime_obj['name']} ({crime_obj['paragraph']})" if crime_obj.get('paragraph') else crime_obj['name']
                 
-                cb = ttk.Checkbutton(inner_frame, text=display_text, variable=var)
-                cb.pack(anchor="w", padx=5, pady=1)
+                # Check if vars already exist, otherwise create them
+                if crime_key not in all_crimes_vars:
+                    check_var = tk.BooleanVar(value=False)
+                    count_var = tk.IntVar(value=1)
+                    all_crimes_vars[crime_key] = {'selected': check_var, 'count': count_var}
+                    
+                    # Set initial state if the crime is already in the selection list
+                    for selected_crime in current_selection_list:
+                        if selected_crime['name'] == crime_obj['name'] and selected_crime.get('paragraph') == crime_obj.get('paragraph'):
+                            check_var.set(True)
+                            count_var.set(selected_crime.get('count', 1))
+                            break
+
+                check_var = all_crimes_vars[crime_key]['selected']
+                count_var = all_crimes_vars[crime_key]['count']
+
+                # Create widgets in a frame for better layout control
+                widget_frame = ttk.Frame(inner_frame)
+                widget_frame.grid(row=i, column=0, sticky="ew", padx=5, pady=1)
+                widget_frame.grid_columnconfigure(1, weight=1)
+
+                # Checkbutton
+                display_text = f"{crime_obj['name']} ({crime_obj['paragraph']})" if crime_obj.get('paragraph') else crime_obj['name']
+                cb = ttk.Checkbutton(widget_frame, text=display_text, variable=check_var, command=lambda cv=check_var, sv=count_var: on_checkbox_toggle(cv, sv))
+                cb.grid(row=0, column=0, sticky="w")
+                
+                # Spinbox
+                spinbox = ttk.Spinbox(widget_frame, from_=1, to=100, textvariable=count_var, width=3, state='readonly')
+                spinbox.grid(row=0, column=2, padx=(5, 0), sticky="e")
+                
+                # Link spinbox state to checkbox state
+                def update_spinbox_state(sv, spinbox_widget):
+                    spinbox_widget.config(state='normal' if sv.get() else 'readonly')
+                
+                check_var.trace_add("write", lambda name, index, mode, sv=check_var, sw=spinbox: update_spinbox_state(sv, sw))
+                update_spinbox_state(check_var, spinbox) # Set initial state
 
             _on_frame_configure(None) # Update scrollregion
 
-        search_entry.bind("<KeyRelease>", lambda event: populate_checkboxes(search_entry.get()))
-        populate_checkboxes() # Initial population
+        search_entry.bind("<KeyRelease>", lambda event: populate_crime_widgets(search_entry.get()))
+        populate_crime_widgets() # Initial population
 
-        v_scrollbar = ttk.Scrollbar(listbox_frame, orient="vertical", command=canvas_for_checkboxes.yview)
+        v_scrollbar = ttk.Scrollbar(listbox_frame, orient="vertical", command=canvas_for_widgets.yview)
         v_scrollbar.grid(row=0, column=1, sticky="ns")
-        canvas_for_checkboxes.config(yscrollcommand=v_scrollbar.set)
+        canvas_for_widgets.config(yscrollcommand=v_scrollbar.set)
         
         # --- Add New Crime Section ---
         add_crime_frame = ttk.LabelFrame(dialog, text="Neue Straftat hinzufügen", padding="10")
@@ -673,10 +783,10 @@ class PoliceRPApp:
             
             # Add the new crime's BooleanVar to all_crimes_vars
             new_crime_key = (new_crime_obj['name'], new_crime_obj.get('paragraph', ''))
-            all_crimes_vars[new_crime_key] = tk.BooleanVar(value=False) # Initially not selected
+            all_crimes_vars[new_crime_key] = {'selected': tk.BooleanVar(value=False), 'count': tk.IntVar(value=1)} # Initially not selected
 
             # Re-populate checkboxes to include the new crime
-            populate_checkboxes(search_entry.get())
+            populate_crime_widgets(search_entry.get())
 
             new_crime_name_entry.delete(0, tk.END)
             new_crime_paragraph_entry.delete(0, tk.END)
@@ -694,8 +804,10 @@ class PoliceRPApp:
             selected_crimes_from_dialog = []
             for crime_obj_in_list in self.predefined_crimes: # Iterate through the full list of crimes
                 crime_key = (crime_obj_in_list['name'], crime_obj_in_list.get('paragraph', ''))
-                if crime_key in all_crimes_vars and all_crimes_vars[crime_key].get():
-                    selected_crimes_from_dialog.append(crime_obj_in_list)
+                if crime_key in all_crimes_vars and all_crimes_vars[crime_key]['selected'].get():
+                    crime_copy = crime_obj_in_list.copy()
+                    crime_copy['count'] = all_crimes_vars[crime_key]['count'].get()
+                    selected_crimes_from_dialog.append(crime_copy)
             
             current_selection_list[:] = selected_crimes_from_dialog
             
@@ -721,12 +833,16 @@ class PoliceRPApp:
         for crime_obj in crimes_list_of_dicts:
             # Ensure crime_obj is a dictionary. If it's a string (from old data), convert it.
             if isinstance(crime_obj, str):
-                crime_obj = {"name": crime_obj, "paragraph": "", "detention_units": 0, "fine": 0}
+                crime_obj = {"name": crime_obj, "paragraph": "", "detention_units": 0, "fine": 0, "count": 1}
 
-            if crime_obj.get("paragraph"):
-                formatted_crimes.append(f"{crime_obj['name']} ({crime_obj['paragraph']})")
+            crime_text = f"{crime_obj['name']} ({crime_obj['paragraph']})" if crime_obj.get('paragraph') else crime_obj['name']
+            
+            # Add count if it exists and is > 1
+            if crime_obj.get('count', 1) > 1:
+                formatted_crimes.append(f"{crime_obj['count']}x {crime_text}")
             else:
-                formatted_crimes.append(crime_obj['name'])
+                formatted_crimes.append(crime_text)
+
 
         if len(formatted_crimes) == 1:
             return formatted_crimes[0]
@@ -739,7 +855,7 @@ class PoliceRPApp:
     # --- Reports Tab Functions ---
     def create_reports_tab(self, parent_frame):
         """Erstellt die Widgets für den Anzeigen-Tab."""
-        content_frame = self._create_scrollable_tab(parent_frame)
+        content_frame, self.reports_canvas = self._create_scrollable_tab(parent_frame)
         content_frame.grid_columnconfigure(0, weight=1)
 
         # --- Design: LabelFrame for grouping ---
@@ -770,7 +886,7 @@ class PoliceRPApp:
         ttk.Button(report_crimes_frame, text="Auswählen", command=lambda: self.open_crime_selection_dialog(self.new_report_selected_crimes, self.new_report_crimes_display_label)).grid(row=0, column=1, sticky="e", padx=(5,0))
 
         ttk.Label(new_report_group, text="Beschreibung:").grid(row=4, column=0, sticky="nw", padx=5, pady=2)
-        self.new_report_description_text = scrolledtext.ScrolledText(new_report_group, wrap=tk.WORD, height=6, bg='#ffffff', fg='#333333', insertbackground='#333333', relief="flat", borderwidth=1) # Design: ScrolledText bg/fg/relief
+        self.new_report_description_text = scrolledtext.ScrolledText(new_report_group, wrap=tk.WORD, height=6, bg=self.entry_bg, fg=self.entry_fg, insertbackground=self.entry_fg, relief="flat", borderwidth=1) # Design: ScrolledText bg/fg/relief
         self.new_report_description_text.grid(row=4, column=1, sticky="ew", padx=5, pady=2)
         
         add_report_button = ttk.Button(new_report_group, text="Anzeige hinzufügen", command=self.add_report)
@@ -782,7 +898,7 @@ class PoliceRPApp:
         reports_list_group.grid_rowconfigure(0, weight=1)
         reports_list_group.grid_columnconfigure(0, weight=1)
 
-        self.reports_listbox = tk.Listbox(reports_list_group, selectmode=tk.SINGLE, font=("Arial", 10), bg='#ffffff', fg='#333333', selectbackground='#cceeff', selectforeground='#333333', relief="flat", borderwidth=1) # Design: Listbox bg/fg/selection/relief
+        self.reports_listbox = tk.Listbox(reports_list_group, selectmode=tk.SINGLE, font=("Arial", 10), bg=self.entry_bg, fg=self.entry_fg, selectbackground=self.select_bg, selectforeground=self.select_fg, relief="flat", borderwidth=1) # Design: Listbox bg/fg/selection/relief
         self.reports_listbox.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
         self.reports_listbox.bind('<<ListboxSelect>>', self.display_selected_report)
         reports_scrollbar = ttk.Scrollbar(reports_list_group, orient="vertical", command=self.reports_listbox.yview)
@@ -804,15 +920,25 @@ class PoliceRPApp:
         selected_report_group.grid_rowconfigure(0, weight=1)
         selected_report_group.grid_columnconfigure(0, weight=1)
 
-        self.selected_report_content_text = scrolledtext.ScrolledText(selected_report_group, wrap=tk.WORD, height=8, state='disabled', bg='#ffffff', fg='#333333', relief="flat", borderwidth=1) # Design: ScrolledText bg/fg/relief
+        self.selected_report_content_text = scrolledtext.ScrolledText(selected_report_group, wrap=tk.WORD, height=8, state='disabled', bg=self.entry_bg, fg=self.entry_fg, relief="flat", borderwidth=1) # Design: ScrolledText bg/fg/relief
         self.selected_report_content_text.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
         self.populate_reports_list()
 
     def populate_reports_list(self):
         """Populates the reports listbox with data."""
         self.reports_listbox.delete(0, tk.END)
+        # Calculate perpetrator report counts
+        perpetrator_counts = {}
         for report in self.reports:
-            self.reports_listbox.insert(tk.END, f"{report['report_id']} - {report['perpetrator_name']} ({report['type']})")
+            perpetrator_name = report.get('perpetrator_name')
+            if perpetrator_name:
+                perpetrator_counts[perpetrator_name] = perpetrator_counts.get(perpetrator_name, 0) + 1
+        
+        # Populate listbox with report counts
+        for report in self.reports:
+            perpetrator_name = report.get('perpetrator_name', 'N/A')
+            count_str = f"({perpetrator_counts.get(perpetrator_name, 0)})" if perpetrator_name != 'N/A' else ""
+            self.reports_listbox.insert(tk.END, f"{report['report_id']} - {perpetrator_name} {count_str} ({report['type']})")
 
     def display_selected_report(self, event):
         """Displays the content of the selected report."""
@@ -860,8 +986,8 @@ class PoliceRPApp:
             messagebox.showinfo("Täterakte erstellt", f"Neue Täterakte für '{perpetrator_name}' wurde automatisch erstellt.")
         
         # Calculate penalties for this report
-        report_detention_units = sum(c.get('detention_units', 0) for c in crimes_committed)
-        report_fine = sum(c.get('fine', 0) for c in crimes_committed)
+        report_detention_units = sum(c.get('detention_units', 0) * c.get('count', 1) for c in crimes_committed)
+        report_fine = sum(c.get('fine', 0) * c.get('count', 1) for c in crimes_committed)
 
         # Update perpetrator file with accumulated penalties and linked report
         perpetrator_file['total_detention_units'] += report_detention_units
@@ -908,6 +1034,7 @@ class PoliceRPApp:
         edit_window.geometry("700x600")
         edit_window.transient(self.root)
         edit_window.grab_set()
+        edit_window.configure(bg=self.bg_color)
         edit_window.grid_rowconfigure(5, weight=1) # Description
         edit_window.grid_columnconfigure(1, weight=1)
 
@@ -937,7 +1064,7 @@ class PoliceRPApp:
         ttk.Button(edit_report_crimes_frame, text="Auswählen", command=lambda: self.open_crime_selection_dialog(self.edit_report_selected_crimes_var, edit_report_crimes_display_label)).grid(row=0, column=1, sticky="e", padx=(5,0))
 
         ttk.Label(edit_window, text="Beschreibung:").grid(row=4, column=0, sticky="nw", padx=5, pady=5)
-        edit_description_text = scrolledtext.ScrolledText(edit_window, wrap=tk.WORD, height=10, bg='#ffffff', fg='#333333', insertbackground='#333333', relief="flat", borderwidth=1) # Design: ScrolledText bg/fg/relief
+        edit_description_text = scrolledtext.ScrolledText(edit_window, wrap=tk.WORD, height=10, bg=self.entry_bg, fg=self.entry_fg, insertbackground=self.entry_fg, relief="flat", borderwidth=1) # Design: ScrolledText bg/fg/relief
         edit_description_text.grid(row=4, column=1, sticky="nsew", padx=5, pady=5)
         edit_description_text.insert(1.0, report['description'])
 
@@ -960,8 +1087,8 @@ class PoliceRPApp:
             if old_perpetrator_id:
                 old_perpetrator_file = next((pf for pf in self.perpetrator_files if pf['id'] == old_perpetrator_id), None)
                 if old_perpetrator_file:
-                    old_report_detention = sum(c.get('detention_units', 0) for c in old_crimes)
-                    old_report_fine = sum(c.get('fine', 0) for c in old_crimes)
+                    old_report_detention = sum(c.get('detention_units', 0) * c.get('count', 1) for c in old_crimes)
+                    old_report_fine = sum(c.get('fine', 0) * c.get('count', 1) for c in old_crimes)
                     old_perpetrator_file['total_detention_units'] -= old_report_detention
                     old_perpetrator_file['total_fine'] -= old_report_fine
                     if report['id'] in old_perpetrator_file['linked_report_ids']:
@@ -982,8 +1109,8 @@ class PoliceRPApp:
                 self.perpetrator_files.append(new_perpetrator_file)
 
             # 3. Apply new report's penalties to the new/updated perpetrator file
-            new_report_detention = sum(c.get('detention_units', 0) for c in new_crimes_committed)
-            new_report_fine = sum(c.get('fine', 0) for c in new_crimes_committed)
+            new_report_detention = sum(c.get('detention_units', 0) * c.get('count', 1) for c in new_crimes_committed)
+            new_report_fine = sum(c.get('fine', 0) * c.get('count', 1) for c in new_crimes_committed)
             new_perpetrator_file['total_detention_units'] += new_report_detention
             new_perpetrator_file['total_fine'] += new_report_fine
             if report['id'] not in new_perpetrator_file['linked_report_ids']:
@@ -1023,8 +1150,8 @@ class PoliceRPApp:
             if perpetrator_id:
                 perpetrator_file = next((pf for pf in self.perpetrator_files if pf['id'] == perpetrator_id), None)
                 if perpetrator_file:
-                    report_detention = sum(c.get('detention_units', 0) for c in report_to_delete.get('crimes_committed', []))
-                    report_fine = sum(c.get('fine', 0) for c in report_to_delete.get('crimes_committed', []))
+                    report_detention = sum(c.get('detention_units', 0) * c.get('count', 1) for c in report_to_delete.get('crimes_committed', []))
+                    report_fine = sum(c.get('fine', 0) * c.get('count', 1) for c in report_to_delete.get('crimes_committed', []))
                     perpetrator_file['total_detention_units'] -= report_detention
                     perpetrator_file['total_fine'] -= report_fine
                     if report_to_delete['id'] in perpetrator_file['linked_report_ids']:
@@ -1043,7 +1170,7 @@ class PoliceRPApp:
     # --- Perpetrator Files Tab Functions ---
     def create_perpetrator_files_tab(self, parent_frame):
         """Erstellt die Widgets für den Täterakten-Tab."""
-        content_frame = self._create_scrollable_tab(parent_frame)
+        content_frame, self.perpetrator_files_canvas = self._create_scrollable_tab(parent_frame)
         # Input section
         input_frame = ttk.LabelFrame(content_frame, text="Neue Täterakte hinzufügen", padding="15 10") # Design: LabelFrame
         input_frame.grid(row=0, column=0, columnspan=3, sticky="ew", pady=10, padx=10)
@@ -1059,7 +1186,7 @@ class PoliceRPApp:
         self.new_pf_birthplace_entry = ttk.Entry(input_frame) # Changed variable name
         self.new_pf_birthplace_entry.grid(row=2, column=1, sticky="ew", padx=5, pady=2)
         ttk.Label(input_frame, text="Beschreibung:").grid(row=3, column=0, sticky="nw", padx=5, pady=2)
-        self.new_pf_description_text = scrolledtext.ScrolledText(input_frame, wrap=tk.WORD, height=5, bg='#ffffff', fg='#333333', insertbackground='#333333', relief="flat", borderwidth=1) # Design: ScrolledText bg/fg/relief
+        self.new_pf_description_text = scrolledtext.ScrolledText(input_frame, wrap=tk.WORD, height=5, bg=self.entry_bg, fg=self.entry_fg, insertbackground=self.entry_fg, relief="flat", borderwidth=1) # Design: ScrolledText bg/fg/relief
         self.new_pf_description_text.grid(row=3, column=1, sticky="ew", padx=5, pady=2)
 
         # Image section within input frame
@@ -1084,7 +1211,7 @@ class PoliceRPApp:
         list_display_frame.grid_rowconfigure(1, weight=1)
         list_display_frame.grid_columnconfigure(0, weight=1)
 
-        self.perpetrator_files_listbox = tk.Listbox(list_display_frame, selectmode=tk.SINGLE, font=("Arial", 10), bg='#ffffff', fg='#333333', selectbackground='#cceeff', selectforeground='#333333', relief="flat", borderwidth=1) # Design: Listbox bg/fg/selection/relief
+        self.perpetrator_files_listbox = tk.Listbox(list_display_frame, selectmode=tk.SINGLE, font=("Arial", 10), bg=self.entry_bg, fg=self.entry_fg, selectbackground=self.select_bg, selectforeground=self.select_fg, relief="flat", borderwidth=1) # Design: Listbox bg/fg/selection/relief
         self.perpetrator_files_listbox.grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
         self.perpetrator_files_listbox.bind('<<ListboxSelect>>', self.display_selected_perpetrator_file)
         pf_scrollbar = ttk.Scrollbar(list_display_frame, orient="vertical", command=self.perpetrator_files_listbox.yview)
@@ -1105,7 +1232,7 @@ class PoliceRPApp:
         selected_pf_group.grid_rowconfigure(0, weight=1)
         selected_pf_group.grid_columnconfigure(0, weight=1)
 
-        self.selected_pf_content_text = scrolledtext.ScrolledText(selected_pf_group, wrap=tk.WORD, height=8, state='disabled', bg='#ffffff', fg='#333333', relief="flat", borderwidth=1) # Design: ScrolledText bg/fg/relief
+        self.selected_pf_content_text = scrolledtext.ScrolledText(selected_pf_group, wrap=tk.WORD, height=8, state='disabled', bg=self.entry_bg, fg=self.entry_fg, relief="flat", borderwidth=1) # Design: ScrolledText bg/fg/relief
         self.selected_pf_content_text.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
 
         self.populate_perpetrator_files_list()
@@ -1208,6 +1335,7 @@ class PoliceRPApp:
         edit_window.geometry("700x600")
         edit_window.transient(self.root)
         edit_window.grab_set()
+        edit_window.configure(bg=self.bg_color)
         edit_window.grid_rowconfigure(4, weight=1) # Description
         edit_window.grid_columnconfigure(1, weight=1) # Input fields
 
@@ -1224,7 +1352,7 @@ class PoliceRPApp:
         edit_birthplace_entry.grid(row=2, column=1, sticky="ew", padx=5, pady=5)
         edit_birthplace_entry.insert(0, pf_record.get('birthplace', pf_record.get('address', ''))) # Migrate old 'address' to 'birthplace' for display
         ttk.Label(edit_window, text="Beschreibung:").grid(row=3, column=0, sticky="nw", padx=5, pady=5)
-        edit_description_text = scrolledtext.ScrolledText(edit_window, wrap=tk.WORD, height=10, bg='#ffffff', fg='#333333', insertbackground='#333333', relief="flat", borderwidth=1) # Design: ScrolledText bg/fg/relief
+        edit_description_text = scrolledtext.ScrolledText(edit_window, wrap=tk.WORD, height=10, bg=self.entry_bg, fg=self.entry_fg, insertbackground=self.entry_fg, relief="flat", borderwidth=1) # Design: ScrolledText bg/fg/relief
         edit_description_text.grid(row=3, column=1, sticky="nsew", padx=5, pady=5)
         edit_description_text.insert(1.0, pf_record.get('description', ''))
 
@@ -1384,22 +1512,26 @@ class PoliceRPApp:
     def load_placeholder_image_pf(self):
         """Lädt und zeigt ein Platzhalterbild an (Person mit ?) für den Erstellungs-/Anzeige-Tab."""
         try:
-            img = Image.new('RGB', (150, 150), color = (200, 200, 200))
+            img = Image.new('RGB', (150, 150), color = (200, 200, 200) if self.settings.get("theme") == "light" else (60, 60, 60))
             d = ImageDraw.Draw(img)
             try:
                 font = ImageFont.truetype("arial.ttf", 80)
             except IOError:
                 font = ImageFont.load_default()
 
-            d.ellipse((30, 20, 120, 110), fill=(100, 100, 100), outline=(50, 50, 50), width=2)
-            d.line((75, 110, 75, 130), fill=(100, 100, 100), width=5)
-            d.arc((20, 100, 130, 180), 0, 180, fill=(100, 100, 100), width=5)
+            fill_color = (100, 100, 100) if self.settings.get("theme") == "light" else (150, 150, 150)
+            outline_color = (50, 50, 50) if self.settings.get("theme") == "light" else (200, 200, 200)
+            text_color = (0, 0, 0) if self.settings.get("theme") == "light" else (255, 255, 255)
+
+            d.ellipse((30, 20, 120, 110), fill=fill_color, outline=outline_color, width=2)
+            d.line((75, 110, 75, 130), fill=fill_color, width=5)
+            d.arc((20, 100, 130, 180), 0, 180, fill=fill_color, width=5)
 
             text = "?"
             text_bbox = d.textbbox((0,0), text, font=font)
             text_width = text_bbox[2] - text_bbox[0]
             text_height = text_bbox[3] - text_bbox[1]
-            d.text(((150 - text_width) / 2, (150 - text_height) / 2), text, font=font, fill=(0, 0, 0))
+            d.text(((150 - text_width) / 2, (150 - text_height) / 2), text, font=font, fill=text_color)
 
             self.perpetrator_photo_image = ImageTk.PhotoImage(img)
             self.perpetrator_image_label.config(image=self.perpetrator_photo_image, text="")
@@ -1477,22 +1609,26 @@ class PoliceRPApp:
     def load_placeholder_image_edit_pf(self):
         """Lädt und zeigt ein Platzhalterbild an (Person mit ?) für das Bearbeitungsfenster."""
         try:
-            img = Image.new('RGB', (150, 150), color = (200, 200, 200))
+            img = Image.new('RGB', (150, 150), color = (200, 200, 200) if self.settings.get("theme") == "light" else (60, 60, 60))
             d = ImageDraw.Draw(img)
             try:
                 font = ImageFont.truetype("arial.ttf", 80)
             except IOError:
                 font = ImageFont.load_default()
 
-            d.ellipse((30, 20, 120, 110), fill=(100, 100, 100), outline=(50, 50, 50), width=2)
-            d.line((75, 110, 75, 130), fill=(100, 100, 100), width=5)
-            d.arc((20, 100, 130, 180), 0, 180, fill=(100, 100, 100), width=5)
+            fill_color = (100, 100, 100) if self.settings.get("theme") == "light" else (150, 150, 150)
+            outline_color = (50, 50, 50) if self.settings.get("theme") == "light" else (200, 200, 200)
+            text_color = (0, 0, 0) if self.settings.get("theme") == "light" else (255, 255, 255)
+
+            d.ellipse((30, 20, 120, 110), fill=fill_color, outline=outline_color, width=2)
+            d.line((75, 110, 75, 130), fill=fill_color, width=5)
+            d.arc((20, 100, 130, 180), 0, 180, fill=fill_color, width=5)
 
             text = "?"
             text_bbox = d.textbbox((0,0), text, font=font)
             text_width = text_bbox[2] - text_bbox[0]
             text_height = text_bbox[3] - text_bbox[1]
-            d.text(((150 - text_width) / 2, (150 - text_height) / 2), text, font=font, fill=(0, 0, 0))
+            d.text(((150 - text_width) / 2, (150 - text_height) / 2), text, font=font, fill=text_color)
 
             self.edit_perpetrator_photo_image = ImageTk.PhotoImage(img)
             self.edit_perpetrator_image_label.config(image=self.edit_perpetrator_photo_image, text="")
@@ -1513,7 +1649,7 @@ class PoliceRPApp:
     # --- Manage Crimes Tab Functions (New) ---
     def create_manage_crimes_tab(self, parent_frame):
         """Creates widgets for the Manage Crimes tab."""
-        content_frame = self._create_scrollable_tab(parent_frame)
+        content_frame, self.manage_crimes_canvas = self._create_scrollable_tab(parent_frame)
         # Add New Crime Section
         add_crime_frame = ttk.LabelFrame(content_frame, text="Neue Straftat hinzufügen", padding="15 10") # Design: LabelFrame
         add_crime_frame.grid(row=0, column=0, columnspan=2, sticky="ew", padx=10, pady=10)
@@ -1545,7 +1681,7 @@ class PoliceRPApp:
         list_crimes_frame.grid_rowconfigure(0, weight=1)
         list_crimes_frame.grid_columnconfigure(0, weight=1)
 
-        self.predefined_crimes_listbox = tk.Listbox(list_crimes_frame, selectmode=tk.SINGLE, font=("Arial", 10), bg='#ffffff', fg='#333333', selectbackground='#cceeff', selectforeground='#333333', relief="flat", borderwidth=1) # Design: Listbox bg/fg/selection/relief
+        self.predefined_crimes_listbox = tk.Listbox(list_crimes_frame, selectmode=tk.SINGLE, font=("Arial", 10), bg=self.entry_bg, fg=self.entry_fg, selectbackground=self.select_bg, selectforeground=self.select_fg, relief="flat", borderwidth=1) # Design: Listbox bg/fg/selection/relief
         self.predefined_crimes_listbox.grid(row=0, column=0, sticky="nsew")
         self.predefined_crimes_listbox.bind('<<ListboxSelect>>', self.display_selected_predefined_crime)
 
@@ -1635,6 +1771,7 @@ class PoliceRPApp:
         edit_window.geometry("400x300")
         edit_window.transient(self.root)
         edit_window.grab_set()
+        edit_window.configure(bg=self.bg_color)
         edit_window.grid_columnconfigure(1, weight=1)
 
         ttk.Label(edit_window, text="Name:").grid(row=0, column=0, sticky="w", padx=5, pady=5)
@@ -1706,7 +1843,7 @@ class PoliceRPApp:
     # --- Report Presets Tab Functions ---
     def create_report_presets_tab(self, parent_frame):
         """Creates widgets for the Report Presets tab."""
-        content_frame = self._create_scrollable_tab(parent_frame)
+        content_frame, self.report_presets_canvas = self._create_scrollable_tab(parent_frame)
         top_frame = ttk.LabelFrame(content_frame, text="Neues Preset hinzufügen", padding="15 10") # Design: LabelFrame
         top_frame.pack(fill="x", pady=10, padx=10)
         top_frame.grid_columnconfigure(1, weight=1)
@@ -1714,7 +1851,7 @@ class PoliceRPApp:
         self.new_report_preset_name_entry = ttk.Entry(top_frame)
         self.new_report_preset_name_entry.grid(row=0, column=1, sticky="ew", padx=5, pady=2) # Adjusted row
         ttk.Label(top_frame, text="Vorlage (Platzhalter wie [name]):").grid(row=1, column=0, sticky="nw", padx=5, pady=2) # Adjusted row
-        self.new_report_preset_template_text = scrolledtext.ScrolledText(top_frame, wrap=tk.WORD, height=6, bg='#ffffff', fg='#333333', insertbackground='#333333', relief="flat", borderwidth=1) # Design: ScrolledText bg/fg/relief
+        self.new_report_preset_template_text = scrolledtext.ScrolledText(top_frame, wrap=tk.WORD, height=6, bg=self.entry_bg, fg=self.entry_fg, insertbackground=self.entry_fg, relief="flat", borderwidth=1) # Design: ScrolledText bg/fg/relief
         self.new_report_preset_template_text.grid(row=1, column=1, sticky="ew", padx=5, pady=2) # Adjusted row
         add_report_preset_button = ttk.Button(top_frame, text="Preset hinzufügen", command=self.add_report_preset)
         add_report_preset_button.grid(row=2, column=0, columnspan=2, pady=10) # Adjusted row
@@ -1724,7 +1861,7 @@ class PoliceRPApp:
         list_frame.grid_rowconfigure(0, weight=1) # Listbox row
         list_frame.grid_columnconfigure(0, weight=1)
 
-        self.report_presets_listbox = tk.Listbox(list_frame, selectmode=tk.SINGLE, font=("Arial", 10), bg='#ffffff', fg='#333333', selectbackground='#cceeff', selectforeground='#333333', relief="flat", borderwidth=1) # Design: Listbox bg/fg/selection/relief
+        self.report_presets_listbox = tk.Listbox(list_frame, selectmode=tk.SINGLE, font=("Arial", 10), bg=self.entry_bg, fg=self.entry_fg, selectbackground=self.select_bg, selectforeground=self.select_fg, relief="flat", borderwidth=1) # Design: Listbox bg/fg/selection/relief
         self.report_presets_listbox.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
         self.report_presets_listbox.bind('<<ListboxSelect>>', self.display_selected_report_preset_template)
         report_presets_scrollbar = ttk.Scrollbar(list_frame, orient="vertical", command=self.report_presets_listbox.yview)
@@ -1754,7 +1891,7 @@ class PoliceRPApp:
         self.dynamic_inputs_frame.grid_columnconfigure(1, weight=1)
 
         ttk.Button(self.fill_report_preset_frame, text="Bericht erstellen", command=self.generate_report, style="Accent.TButton").grid(row=1, column=0, columnspan=3, padx=5, pady=5, sticky="ew")
-        self.generated_report_text = scrolledtext.ScrolledText(self.fill_report_preset_frame, wrap=tk.WORD, height=10, state='disabled', bg='#ffffff', fg='#333333', insertbackground='#333333', relief="flat", borderwidth=1) # Design: ScrolledText bg/fg/relief
+        self.generated_report_text = scrolledtext.ScrolledText(self.fill_report_preset_frame, wrap=tk.WORD, height=10, state='disabled', bg=self.entry_bg, fg=self.entry_fg, insertbackground=self.entry_fg, relief="flat", borderwidth=1) # Design: ScrolledText bg/fg/relief
         self.generated_report_text.grid(row=2, column=0, columnspan=3, sticky="nsew", padx=5, pady=5)
         self.fill_report_preset_frame.grid_rowconfigure(2, weight=1)
 
@@ -1839,6 +1976,7 @@ class PoliceRPApp:
         edit_window.geometry("600x500")
         edit_window.transient(self.root)
         edit_window.grab_set()
+        edit_window.configure(bg=self.bg_color)
         edit_window.grid_rowconfigure(1, weight=1)
         edit_window.grid_columnconfigure(1, weight=1)
 
@@ -1847,7 +1985,7 @@ class PoliceRPApp:
         edit_name_entry.grid(row=0, column=1, sticky="ew", padx=5, pady=5)
         edit_name_entry.insert(0, preset['name'])
         ttk.Label(edit_window, text="Vorlage:").grid(row=1, column=0, sticky="nw", padx=5, pady=5)
-        edit_template_text = scrolledtext.ScrolledText(edit_window, wrap=tk.WORD, height=15, bg='#ffffff', fg='#333333', insertbackground='#333333', relief="flat", borderwidth=1) # Design: ScrolledText bg/fg/relief
+        edit_template_text = scrolledtext.ScrolledText(edit_window, wrap=tk.WORD, height=15, bg=self.entry_bg, fg=self.entry_fg, insertbackground=self.entry_fg, relief="flat", borderwidth=1) # Design: ScrolledText bg/fg/relief
         edit_template_text.grid(row=1, column=1, sticky="nsew", padx=5, pady=5)
         edit_template_text.insert(1.0, preset['template_string'])
 
@@ -2016,8 +2154,38 @@ class PoliceRPApp:
         except Exception as e:
             messagebox.showerror("Exportfehler", f"Fehler beim Exportieren der Unterschrift als Bild: {e}")
 
+    # --- Settings Tab Functions ---
+    def create_settings_tab(self, parent_frame):
+        """Creates widgets for the Settings tab."""
+        content_frame, self.settings_canvas = self._create_scrollable_tab(parent_frame)
+        
+        theme_group = ttk.LabelFrame(content_frame, text="Design", padding="15 10")
+        theme_group.pack(fill="x", pady=10, padx=10)
+        
+        ttk.Label(theme_group, text="Farbschema auswählen:").pack(padx=5, pady=5, anchor="w")
+        
+        self.theme_var = tk.StringVar(value=self.settings.get("theme", "light"))
+        
+        light_mode_radio = ttk.Radiobutton(theme_group, text="Light Mode", variable=self.theme_var, value="light", command=self.change_theme)
+        light_mode_radio.pack(padx=10, pady=2, anchor="w")
+        
+        dark_mode_radio = ttk.Radiobutton(theme_group, text="Dark Mode", variable=self.theme_var, value="dark", command=self.change_theme)
+        dark_mode_radio.pack(padx=10, pady=2, anchor="w")
+        
+    def change_theme(self):
+        """Changes the application theme and saves the setting."""
+        new_theme = self.theme_var.get()
+        if self.settings.get("theme") != new_theme:
+            self.settings["theme"] = new_theme
+            self.save_settings()
+            self.apply_theme()
+            self.populate_reports_list() # To update the count colors if needed
+            self.display_perpetrator_image() # To update placeholder image
+            self.display_edit_perpetrator_image() # To update placeholder image
+
+
 if __name__ == "__main__":
     root = tk.Tk()
     app = PoliceRPApp(root)
-    # Load placeholder image for the perpetrator files tab on startup
     root.mainloop()
+
