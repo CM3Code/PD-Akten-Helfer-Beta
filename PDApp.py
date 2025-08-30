@@ -245,15 +245,15 @@ class PoliceRPApp:
         """Applies the current theme to the application."""
         theme = self.settings.get("theme", "light")
         if theme == "dark":
-            self.root.configure(bg='#333333')
-            bg_color = '#444444'
+            self.root.configure(bg="#202020")
+            bg_color = '#202020'
             fg_color = '#ffffff'
-            border_color = '#555555'
-            label_bg = '#444444'
+            border_color = "#070707"
+            label_bg = '#202020'
             label_fg = '#eeeeee'
-            entry_bg = '#555555'
+            entry_bg = "#2B2B2B"
             entry_fg = '#ffffff'
-            select_bg = '#5a7e9e'
+            select_bg = "#126ADD"
             select_fg = '#ffffff'
         else: # light theme
             self.root.configure(bg='#e0e0e0')
@@ -264,7 +264,7 @@ class PoliceRPApp:
             label_fg = '#333333'
             entry_bg = '#ffffff'
             entry_fg = '#333333'
-            select_bg = '#cceeff'
+            select_bg = "#5E94DA"
             select_fg = '#333333'
         
         style = ttk.Style()
@@ -282,7 +282,35 @@ class PoliceRPApp:
         style.configure('TNotebook', background=bg_color, borderwidth=0)
         style.configure('TNotebook.Tab', background=bg_color, foreground=fg_color)
         style.map('TNotebook.Tab', background=[('selected', label_bg)], foreground=[('selected', fg_color)])
-        
+                # --- Scrollbars einfärben ---
+        style.configure(
+            "Vertical.TScrollbar",
+            gripcount=0,
+            background=select_bg,     # Balkenfarbe
+            troughcolor=bg_color,     # Rinne (Hintergrund)
+            bordercolor=border_color, # Rahmen
+            arrowcolor=fg_color       # Pfeile
+        )
+        style.map(
+            "Vertical.TScrollbar",
+            background=[("active", select_bg), ("pressed", "#126ADD")],
+            arrowcolor=[("active", fg_color)]
+        )
+
+        style.configure(
+            "Horizontal.TScrollbar",
+            gripcount=0,
+            background=select_bg,
+            troughcolor=bg_color,
+            bordercolor=border_color,
+            arrowcolor=fg_color
+        )
+        style.map(
+            "Horizontal.TScrollbar",
+            background=[("active", select_bg), ("pressed", "#126ADD")],
+            arrowcolor=[("active", fg_color)]
+        )
+
         # Apply to Listbox and ScrolledText directly
         # These are handled in the widget creation
         self.bg_color = bg_color
@@ -2188,4 +2216,3 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = PoliceRPApp(root)
     root.mainloop()
-
