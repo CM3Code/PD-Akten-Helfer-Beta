@@ -2,17 +2,17 @@
     {
         "id": "d08b5689-7fd2-417f-99a2-f9da54084c36",
         "name": "Festnahme",
-        "template_string": "[Herr/Frau] [Name] wurde am [Datum] um [Uhrzeit] in [Ort] festgenommen. \n\nGrund der Festnahme: [Grund]. Die Person wurde zur [Ort der Verbringung] verbracht. \n\nHaftzeit: [Anzahl] Hafteinheiten. \n\nGeldstrafe: [Betrag]€. \n\nAktenzeichen: [Aktenzeichen].\n\nUnterschrift: [Officer Name]."
+        "template_string": "[Herr/Frau] [Name] wurde am [Datum] um [Uhrzeit] in [Ort] festgenommen. \n\nGrund der Festnahme: \n\n[Grund]\n\n. Die Person wurde zur [Ort der Verbringung] verbracht. \n\nHaftzeit: [Anzahl] Hafteinheiten. \n\nGeldstrafe: [Betrag]€. \n\nAktenzeichen: [Aktenzeichen].\n\nUnterschrift: [Officer Name]."
     },
     {
         "id": "c3ff7302-cf8f-4c56-bb50-dbf470e36c5f",
         "name": "Festnahme 2 Officer",
-        "template_string": "[Herr/Frau] [Name] wurde am [Datum] um [Uhrzeit] in [Ort] festgenommen. \n\nGrund der Festnahme: [Grund]. Die Person wurde zur [Ort der Verbringung] verbracht. \n\nHaftzeit: [Anzahl] Hafteinheiten. \n\nGeldstrafe: [Betrag]€. \n\nAktenzeichen: [Aktenzeichen].\n\nUnterschrift Beamter 1: [Officer Name1].\nUnterschrift Beamter 2: [Officer Name2]."
+        "template_string": "[Herr/Frau] [Name] wurde am [Datum] um [Uhrzeit] in [Ort] festgenommen. \n\nGrund der Festnahme: \n\n[Grund]\n\n Die Person wurde zur [Ort der Verbringung] verbracht. \n\nHaftzeit: [Anzahl] Hafteinheiten. \n\nGeldstrafe: [Betrag]€. \n\nAktenzeichen: [Aktenzeichen].\n\nUnterschrift Beamter 1: [Officer Name1].\nUnterschrift Beamter 2: [Officer Name2]."
     },
     {
         "id": "c95dff35-bdd2-4fa0-a419-425f617c378b",
         "name": "NRW Festnahme",
-        "template_string": "Wer: [Wer]\n\nGrund der Festnahme: [Grund der Festnahme]\n\nWo: [Wo]\n\nWann: [Wann] Uhr\n\nHaftzeiten: [Haftzeiten]\n\nWeitere Infos: [Weitere Infos]\n\nStreifen Partner: [Streifen Partner]\n\nUnterschrift des Beamten: [Unterschrift des Beamten]"
+        "template_string": "Wer: [Wer]\n\nGrund der Festnahme: \n\n[Grund]\n\n Wo: [Wo]\n\nWann: [Wann] Uhr\n\nHaftzeiten: [Haftzeiten]\n\nWeitere Infos: [Weitere Infos]\n\nStreifen Partner: [Streifen Partner]\n\nUnterschrift des Beamten: [Unterschrift des Beamten]"
     },
     {
         "id": "b4b44a4d-17de-4e6a-8b87-88b1bb7f25a2",
@@ -34,4 +34,5 @@
         "name": "NRW Fahndung",
         "template_string": "Wer: [Wenn Personalausweis gesehen]\n\nPersonalausweis: [Personalausweis]\n\nKennzeichen/Fahrzeug Details: [Kennzeichen/Fahrzeug Details]\n\nStraftat: [Straftat]\n\nBild, wenn Gesicht nicht Verdeckt"
     }
+
 ]
