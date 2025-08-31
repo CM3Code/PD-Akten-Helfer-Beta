@@ -2,7 +2,7 @@
     {
         "id": "d08b5689-7fd2-417f-99a2-f9da54084c36",
         "name": "Festnahme",
-        "template_string": "[Herr/Frau] [Name] wurde am [Datum] um [Uhrzeit] in [Ort] festgenommen. \n\nGrund der Festnahme: \n\n[Grund]\n\n. Die Person wurde zur [Ort der Verbringung] verbracht. \n\nHaftzeit: [Anzahl] Hafteinheiten. \n\nGeldstrafe: [Betrag]€. \n\nAktenzeichen: [Aktenzeichen].\n\nUnterschrift: [Officer Name]."
+        "template_string": "[Herr/Frau] [Name] wurde am [Datum] um [Uhrzeit] in [Ort] festgenommen. \n\nGrund der Festnahme: \n\n[Grund]\n\n Die Person wurde zur [Ort der Verbringung] verbracht. \n\nHaftzeit: [Anzahl] Hafteinheiten. \n\nGeldstrafe: [Betrag]€. \n\nAktenzeichen: [Aktenzeichen].\n\nUnterschrift: [Officer Name]."
     },
     {
         "id": "c3ff7302-cf8f-4c56-bb50-dbf470e36c5f",
@@ -36,3 +36,4 @@
     }
 
 ]
+
